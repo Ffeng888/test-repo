@@ -1,0 +1,24 @@
+{
+  "sessionID": "ses_2e67d0d6dffe0dZjKyHNieKddS",
+  "modelID": "Pro/moonshotai/Kimi-K2.5",
+  "providerID": "siliconflow-cn",
+  "limits": {
+    "context": 262000,
+    "output": 262000
+  },
+  "calculated": {
+    "maxOutputTokens": 32000,
+    "reserved": 20000,
+    "usable": 230000
+  },
+  "current": {
+    "totalTokens": 183792,
+    "pressure": 0.7990956521739131,
+    "level": "moderate"
+  },
+  "thresholds": {
+    "moderate": 172500,
+    "high": 207000
+  },
+  "updatedAt": "2026-03-23T09:33:32.511Z"
+}
