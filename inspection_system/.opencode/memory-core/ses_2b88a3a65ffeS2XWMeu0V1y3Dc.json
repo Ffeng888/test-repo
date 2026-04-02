@@ -1,0 +1,21 @@
+{
+  "sessionID": "ses_2b88a3a65ffeS2XWMeu0V1y3Dc",
+  "blocks": {
+    "goal": {
+      "value": "",
+      "charLimit": 1000,
+      "lastModified": "2026-04-01T05:36:44.701Z"
+    },
+    "progress": {
+      "value": "## 正在进行：Jetson TX2 PyTorch CUDA支持安装\n\n### 已完成：\n1. ✅ 安装 ultralytics==8.0.196\n2. ✅ 安装 flask/flask-cors\n3. ✅ 系统识别：JetPack R35 (5.1.1), TX2平台\n\n### 待完成：\n1. 🔄 安装 Jetson专用 PyTorch (带CUDA支持)\n2. ⏳ 验证 CUDA可用\n3. ⏳ 安装 TorchVision\n4. ⏳ 下载代码、复制模型、编译启动\n\n### 下一步操作（用户执行）：\n```bash\n# 清理旧版本\npip3 uninstall torch torchvision -y\n\n# 下载并安装 PyTorch for JetPack 5.1\ncd ~\nwget https://developer.download.nvidia.com/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl\npip3 install torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl\n\n# 验证 CUDA\npython3 -c \"import torch; print('CUDA:', torch.cuda.is_available())\"\n\n# 安装 TorchVision\npip3 install torchvision==0.15.0 --no-deps\n```\n\n### 关键提醒：\n- 问题：pip安装的通用PyTorch不支持CUDA\n- 解决：必须用NVIDIA官方的 Jetson wheel\n- 平台：t186ref (TX2), JetPack 5.1 (R35)",
+      "charLimit": 2000,
+      "lastModified": "2026-04-01T05:36:44.701Z"
+    },
+    "context": {
+      "value": "",
+      "charLimit": 1500,
+      "lastModified": "2026-04-01T05:36:44.701Z"
+    }
+  },
+  "updatedAt": "2026-04-01T05:36:44.701Z"
+}
