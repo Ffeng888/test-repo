@@ -1,0 +1,80 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-02T07:55:16Z",
+  "phase": "jetson-onxx-debug",
+  "phase_name": "Jetson ONNX分割掩码修复",
+  "phase_dir": "inspection_system",
+  "plan": 1,
+  "task": 1,
+  "total_tasks": 1,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "分割掩码修复",
+      "status": "done",
+      "description": "找到根本原因并修复: bbox格式(xyxy)、mask算法(upsample+crop)、gain方向、class-aware NMS"
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": 2,
+      "name": "部署yolo_detector.py到Jetson",
+      "status": "not_started",
+      "description": "上传修复后的yolo_detector.py，运行colcon build，启动ROS2节点验证实时相机流"
+    },
+    {
+      "id": 3,
+      "name": "参数调优",
+      "status": "not_started",
+      "description": "IOU_THRESH可能需要从0.5降到0.3改善小目标检测"
+    }
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {
+      "action": "上传yolo_detector.py到Jetson",
+      "context": "文件已修复，需同步到Jetson: scp yolo_detector.py unitree@192.168.50.25:/home/unitree/inspection_system/src/inspection_perception/inspection_perception/",
+      "blocking": true
+    },
+    {
+      "action": "colcon build",
+      "context": "Jetson上重新编译: cd ~/inspection_system && colcon build --packages-select inspection_perception && source install/setup.bash",
+      "blocking": true
+    },
+    {
+      "action": "启动ROS2节点测试",
+      "context": "ros2 launch inspection_bringup perception.launch.py",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "ONNX bbox输出格式是(x1,y1,x2,y2)而非(cx,cy,w,h)",
+      "rationale": "Jetson诊断确认：xyxy假设下port尺寸39x41合理，xywh假设下785x414不合理"
+    },
+    {
+      "decision": "直接resize替代letterbox预处理",
+      "rationale": "模型训练配置rect=False，直接resize到640x640匹配训练方式"
+    },
+    {
+      "decision": "采用官方process_mask_native算法生成mask",
+      "rationale": "masks_in @ proto_flat → upsample到原图 → 原图坐标crop → >0阈值，避免几何畸变"
+    },
+    {
+      "decision": "不使用sigmoid",
+      "rationale": "官方代码直接>0阈值，系数设计已保证对比度"
+    },
+    {
+      "decision": "Class-aware NMS",
+      "rationale": "同类重叠才抑制，跨类不抑制，避免端口和交换机互相压制"
+    }
+  ],
+  "uncommitted_files": [
+    "inspection_system/test_image_v4.py",
+    "inspection_system/src/inspection_perception/inspection_perception/yolo_detector.py",
+    ".planning/reports/SESSION_REPORT_20260402.md"
+  ],
+  "next_action": "上传yolo_detector.py到Jetson并重新编译，然后启动ROS2节点验证实时相机流掩码可视化",
+  "context_notes": "本次会话通过Jetson远程诊断定位了分割掩码问题的根本原因：ONNX输出bbox是xyxy格式但代码当成xywh处理。修复后test_image_v4.py验证通过，mask正确绘制。yolo_detector.py已同步所有修复，等待Jetson部署验证。"
+}
